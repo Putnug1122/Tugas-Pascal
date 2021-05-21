@@ -1,3 +1,6 @@
+//Gede Putra Nugraha
+//1KS2
+
 program data_nilai_mhs;
 
 uses crt;
