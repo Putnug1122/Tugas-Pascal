@@ -2,7 +2,7 @@ program data_nilai_mhs;
 
 uses crt;
 type mhs = record
-     nama,nim,tgl:string;
+     nama,nim,tgl,grade:string;
      tugas,prak,uas,uts:integer;
      akhir:real;
      end;
@@ -10,51 +10,9 @@ type mhs = record
 var dtmhs:array [1..35] of mhs;
     i,a,uts_max,uas_max,uts_min,uas_min  :integer;
     akhir_min,akhir_max:Real;
-    grade:string;
+    // grade:string;
     pilih:integer;
 
-procedure input;
-
-begin
-  clrscr;
-  writeln(' ');
-  writeln(' MASUKKAN DATA NILAI MAHASISWA ');
-  writeln(' ----------------------------- ');
-  write  (' Jumlah Mahasiswa : '); readln(a);
-  writeln;
-  for i:=1 to a do
-  begin
-  with dtmhs[i] do
-     begin
-     writeln(' Data Ke-',i);
-     writeln(' ----------- ');
-     write  (' Nama      : '); readln (dtmhs[i].nama);
-     write  (' NIM       : '); readln (dtmhs[i].nim);
-     write  (' Tugas     : '); readln (dtmhs[i].tugas);
-     write  (' UTS       : '); readln (dtmhs[i].uts);
-     write  (' UAS       : '); readln (dtmhs[i].uas);
-     write  (' Praktikum : '); readln (dtmhs[i].prak);
-     writeln;
-     readln;
-     end;
-  end;
-end;
-
-procedure tabel;
-begin
-  writeln(' ');
-  writeln('|===============================================================================================================|');
-  writeln('|                    DATA NILAI MAHASISWA                                                                       |');
-  writeln('|===============================================================================================================|');
-  writeln('|NO.|  NAMA MAHASISWA  |     NIM     |   TUGAS   |   UTS   |    UAS   |    PRAK    |      NA       |    GRADE   |');
-  writeln('|---------------------------------------------------------------------------------------------------------------|');
-  for i:=1 to a do
-  begin
-  gotoxy(1,i+6);
-  writeln('|   |                  |             |           |         |          |            |               |            |');
-  writeln('|===============================================================================================================|');
-  end;
-end;
 
 // Fungsi Maksimum
 function utsmax(): Integer;
@@ -294,24 +252,77 @@ begin
     'e': writeln('Nilai rata-rata NA adalah ',rerata_akhir():0:2);
   end;
 end;
+
+function NAkhir(a,b,c,d:Integer): Real;
+begin
+    Nakhir:=(a+3*(b+c+d))/10;
+end;
+
+function grading(a:real):char;
+var hasil:char;
+begin
+    case trunc(a) of
+         0..19  : hasil:='E';
+        20..39  : hasil:='D';
+        40..59  : hasil:='C';
+        60..79  : hasil:='B';
+        80..100 : hasil:='A';
+    end;
+    grading:=hasil;
+end;
+
+procedure input;
+
+begin
+  clrscr;
+  writeln(' ');
+  writeln(' MASUKKAN DATA NILAI MAHASISWA ');
+  writeln(' ----------------------------- ');
+  write  (' Jumlah Mahasiswa : '); readln(a);
+  writeln;
+  for i:=1 to a do
+  begin
+  with dtmhs[i] do
+     begin
+     writeln(' Data Ke-',i);
+     writeln(' ----------- ');
+     write  (' Nama      : '); readln (dtmhs[i].nama);
+     write  (' NIM       : '); readln (dtmhs[i].nim);
+     write  (' Tugas     : '); readln (dtmhs[i].tugas);
+     write  (' UTS       : '); readln (dtmhs[i].uts);
+     write  (' UAS       : '); readln (dtmhs[i].uas);
+     write  (' Praktikum : '); readln (dtmhs[i].prak);
+     akhir:=NAkhir(tugas,uts,uas,prak);
+     grade:=grading(akhir);
+     writeln;
+     readln;
+     end;
+  end;
+end;
+
+procedure tabel;
+begin
+  writeln(' ');
+  writeln('|===============================================================================================================|');
+  writeln('|                    DATA NILAI MAHASISWA                                                                       |');
+  writeln('|===============================================================================================================|');
+  writeln('|NO.|  NAMA MAHASISWA  |     NIM     |   TUGAS   |   UTS   |    UAS   |    PRAK    |      NA       |    GRADE   |');
+  writeln('|---------------------------------------------------------------------------------------------------------------|');
+  for i:=1 to a do
+  begin
+  gotoxy(1,i+6);
+  writeln('|   |                  |             |           |         |          |            |               |            |');
+  writeln('|===============================================================================================================|');
+  end;
+end;
+
+
 procedure output;
 var
   chose: Integer;
  begin
  clrscr;
  tabel;
- for i:=1 to a do
- begin
-   dtmhs[i].akhir := (0.1*dtmhs[i].tugas) + (0.3*dtmhs[i].uts) + (0.3*dtmhs[i].uas) + (0.3*dtmhs[i].prak);
-   with dtmhs[i] do
-   begin
-        if (akhir>=0)  and (akhir < 20) then grade:='E' else
-        if (akhir>=20) and (akhir < 40) then grade:='D' else
-        if (akhir>=40) and (akhir < 60) then grade:='C' else
-        if (akhir>=60) and (akhir < 80) then grade:='B' else
-        grade:='A' ;
-   end;
- end;
  for i:=1 to a do
  begin
    with dtmhs[i] do
@@ -363,5 +374,4 @@ begin
     6: writeln('Terima kasih');
   end;
 end.
-
 
